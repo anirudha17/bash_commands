@@ -1,0 +1,173 @@
+//node version update
+nvm install 16.14.2 
+
+//node version update for linux
+npm install -g n   # Install n globally
+n 16.14.2          # Install and use v16.14.2
+*******************************************************************************************
+
+//Create React App
+npx create-react-app my-app
+cd my-app
+npm start
+npm run build
+
+//Create React App in current directory
+npx create-react-app .
+
+//to use npm instead of yarn
+delete yarn.lock file and run the command 'npm i'
+**********************************************************************************************
+
+//creating git locally
+'git init'   //Initialize git - 'ls -a' command will show hidden files 
+'git add' <filename> or 'git add .'   //to stage files - 'git status' to check stagging area
+'git commit -m "Commit message"'   //to commit files - 'git log' will show the commits committed
+
+'git checkout <commmit hash code>'  //it is used to switch between branches in a repository - 'git checkout master' to go back to master 
+
+
+//push to an existing repository from the command line
+first create a new github repository from github.com
+git remote add origin https://github.com/anirudha17/trial.git 
+git branch -M main
+git push -u origin main --force
+
+
+//first git add .
+//second git commit -m "commit message"
+//third git push
+
+
+// Running git config globally
+git config --global user.email "my@emailaddress.com"
+git config --global user.name "my_name"
+git config –list  //to check the username and email
+
+//Cloning a repository in github - get code from github to local system 
+git clone <repo url>
+**************************************************************************************************
+
+
+//Deploy an App in a vps//
+
+create a droplet(vps)
+connect to that droplet(vps) in terminal by using 'ssh root@ip_address' 
+
+sudo apt update
+sudo apt install nginx //go to the ip address to check if nginx is working or not
+
+sudo ufw enable  //enables ubuntu firewall
+sudo ufw status  //checks status of the firewall
+sudo ufw allow ssh (Port 22)
+sudo ufw allow http (Port 80)
+sudo ufw allow https (Port 443)
+
+open filezilla and connect to the server.
+in filezilla go to /var/www/html and delete the html file and paste your React builld files //go to the ip address to check if app is working or not
+
+buy a domain from my.freenom.com
+go to digitalocean > networking > Domains: and add a domain (example:mywebsite.cf)
+that will take you to Domains/mywebsite.cf   Create a new record=>
+add two A records > first:@(root)   second:www 
+add 3 nameservers in my.freenom.com.   ns1.digitalocean.com,ns2.digitalocean.com,ns3.digitalocean.com
+
+sudo add-apt-repository ppa:certbot/certbot  //ssl certificate
+sudo apt-get update
+sudo apt-get install python3-certbot-nginx
+sudo certbot --nginx -d yourdomain.com -d www.yourdomain.com
+# Only valid for 90 days, test the renewal process with
+certbot renew --dry-run
+
+/* you might run into the following problems */
+=> when going to /about and reloading the page you were getting 404 error
+ans. go to /etc/nginx/sites-available/
+~ type vim default
+~ go to location{....} comment out 'try_files $uri $uri/ =404;' and type 'try_files $uri /index.html;'
+********************************************************************************************************
+
+
+//mongodb database on vps//
+
+//Install MongoDB
+create a vps
+wget -qO - https://www.mongodb.org/static/pgp/server-5.0.asc | sudo apt-key add -  
+echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/5.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-5.0.list
+sudo apt-get update
+sudo apt-get install -y mongodb-org
+sudo systemctl start mongod
+sudo systemctl status mongod
+sudo systemctl restart mongod
+mongosh
+
+//create an admin and an user
+mongo
+use admin
+
+1. Create an admin
+db.createUser({user: "admin", pwd: "adminpassword", roles: [{role: "root", db: "admin"}]})
+
+2. Create an normal user with read write permission
+db.createUser({user: "user", pwd: "userpassword", roles: [{role: "readWriteAnyDatabase", db: "admin"}]})
+
+//BindIP For Remote Connection & Enable authentication
+nano /etc/mongod.conf
+
+Edit the configuration file like this:
+net:
+  port: 27017
+  bindIp: 0.0.0.0
+security:
+  authorization: enabled
+
+Restart the server:
+systemctl restart mongod
+
+//Connect
+1.mongodb compass-connection string
+mongodb://<username>:<userpassword>@<ip-address>:27017
+
+2.mongo shell
+exit the mongo shell then type
+mongo admin -u uname -p 'password'
+
+
+************************************************************************************************************************
+//VPN//
+
+1.create a vps
+
+2.run commands
+apt update
+apt upgrade
+apt install ca-certificates wget net-tools gnupg
+wget -qO - https://as-repository.openvpn.net/as-repo-public.gpg | apt-key add -
+echo "deb http://as-repository.openvpn.net/as/debian focal main">/etc/apt/sources.list.d/openvpn-as-repo.list
+apt update
+apt install openvpn-as
+
+3.Access the Admin Dashboard
+after 'apt install openvpn-as', you will get 'https://<your-ip>:943/admin' on your terminal. username and password also come in terminal
+go to https://<your-ip>:943/admin and login
+go to user management - user permissions and add a new user , allow that user auto login and save settings
+go to more settings and set password for that user
+go to https://<your-ip>:943/ and login with user
+go to profiles management and click on create and you will download a .ovpn file
+
+4.'openvpn connect' application in windows and drag and drop .ovpn file in it.
+
+*****************************************************************************************************************************
+
+
+
+
+
+
+
+
+
+
+
+
+
+
